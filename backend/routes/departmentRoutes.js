@@ -12,6 +12,7 @@ router.post('/departments', addDepartment)
 router.put('/departments/:id', updateDepartment)
 router.delete('/departments/:id', deleteDepartment)
 
+
 module.exports = {
     routes: router
 }

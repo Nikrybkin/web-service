@@ -9,6 +9,18 @@ const routes: RouteConfig[] = [
         path: '/departments',
         component: () => import('pages/Departments/Departments.vue')
       },
+      {
+        path: '/departments/:id',
+        component: () => import('pages/Departments/Department.vue')
+      },
+      {
+        path: '/workers',
+        component: () => import('pages/Workers/Workers.vue')
+      },
+      {
+        path: '/workers/:id',
+        component: () => import('pages/Workers/Worker.vue')
+      }
     ]
   },
 

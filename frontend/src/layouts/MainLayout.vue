@@ -57,6 +57,12 @@ const linksData = [
     icon: 'table',
     link: '/#/departments'
   },
+  {
+    title: 'Workers',
+    caption: 'List of workers',
+    icon: 'people',
+    link: '/#/workers'
+  },
 ];
 
 @Component({
