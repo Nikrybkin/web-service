@@ -11,10 +11,7 @@
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
 
-        <q-toolbar-title>
-          Company
-        </q-toolbar-title>
-
+        <q-toolbar-title> Company </q-toolbar-title>
       </q-toolbar>
     </q-header>
 
@@ -40,39 +37,49 @@
 </template>
 
 <script lang="ts">
-
-import { Vue, Component } from 'vue-property-decorator';
-import EssentialLink from 'components/EssentialLink.vue'
+import { Vue, Component } from "vue-property-decorator";
+import EssentialLink from "components/EssentialLink.vue";
 
 const linksData = [
   {
-    title: 'Home',
-    caption: 'Home page',
-    icon: 'home',
-    link: '/'
+    title: "Home",
+    caption: "Home page",
+    icon: "home",
+    link: "/",
   },
   {
-    title: 'Departments',
-    caption: 'List of departments',
-    icon: 'table',
-    link: '/#/departments'
+    title: "Departments",
+    caption: "List of departments",
+    icon: "table",
+    link: "/#/departments",
   },
   {
-    title: 'Workers',
-    caption: 'List of workers',
-    icon: 'people',
-    link: '/#/workers'
+    title: "Workers",
+    caption: "List of workers",
+    icon: "people",
+    link: "/#/workers",
+  },
+  {
+    title: "Types Expense",
+    caption: "List of types expense",
+    icon: "folder",
+    link: "/#/typesExpense",
+  },
+  {
+    title: "Consumptions",
+    caption: "List of consumptions",
+    icon: "landmark",
+    link: "/#/consumptions",
   },
 ];
 
 @Component({
-  components: { EssentialLink }
+  components: { EssentialLink },
 })
 export default class MainLayout extends Vue {
   leftDrawerOpen = false;
   essentialLinks = linksData;
 }
-
 </script>
 
 <style lang="scss">

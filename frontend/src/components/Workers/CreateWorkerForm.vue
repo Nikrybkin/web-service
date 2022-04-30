@@ -60,7 +60,6 @@
             :options="departmentName"
             class="input"
             filled
-            clearable
             label="Отдел"
             lazy-rules
           />

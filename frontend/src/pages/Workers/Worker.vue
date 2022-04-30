@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-card-section class="btns">
-      <div class="text-h6">Создание рабочего</div>
+      <div class="text-h6">Информация о рабочем</div>
       <q-btn label="Назад" @click="$router.push('/workers')" />
     </q-card-section>
     <q-card-section>
@@ -60,7 +60,6 @@
           :options="workerName"
           class="input"
           filled
-          clearable
           label="Отдел"
           lazy-rules
         />

@@ -1,13 +1,13 @@
 <template>
-  <q-dialog @before-hide="hide" v-if="department" v-model="value">
+  <q-dialog @before-hide="hide" v-if="typeExpense" v-model="value">
     <q-card style="width: 700px; max-width: 80vh">
       <q-card-section>
         <div class="text-h6">Создание отдела</div>
       </q-card-section>
       <q-card-section>
-        <form @submit="addDepartment">
+        <form @submit="addTypeExpense">
           <q-input
-            v-model="department.Name"
+            v-model="typeExpense.Name"
             class="input"
             filled
             clearable
@@ -16,16 +16,13 @@
             lazy-rules
           />
           <q-input
-            v-model="department.NumberWorkers"
+            v-model="typeExpense.Description"
             class="input"
             filled
             clearable
-            label="Количество рабочих"
+            label="Описание"
+            maxlength="40"
             lazy-rules
-            type="number"
-            :rules="[
-              (val) => (val > 0 && val < 101) || 'Введите число от 1 до 100',
-            ]"
           />
           <q-card-actions class="button-block">
             <q-btn
@@ -48,13 +45,13 @@ import axios from "axios";
 @Component({
   components: {},
 })
-export default class CreateDepartmentForm extends Vue {
+export default class CreateTypeExpenseForm extends Vue {
   value = false;
   isAddButtonDisabled: boolean = true;
-  department:
+  typeExpense:
     | {
         Name: string;
-        NumberWorkers: number;
+        Description: string;
       }
     | any = null;
 
@@ -62,30 +59,33 @@ export default class CreateDepartmentForm extends Vue {
     return true;
   }
 
+  // get checkAddButtonDisabled() {
+  //   return !(
+  //     this.typeExpense.Name.length > 0 &&
+  //     this.typeExpense.Description.length < 41
+  //   );
+  // }
+
   get checkAddButtonDisabled() {
-    return !(
-      this.department.NumberWorkers > 0 &&
-      this.department.NumberWorkers < 101 &&
-      this.department.Name !== ""
-    );
+    return this.typeExpense.Name == "" || this.typeExpense.Description == "";
   }
 
   async show() {
-    this.department = {
+    this.typeExpense = {
       Name: "",
-      NumberWorkers: 0,
+      Description: "",
     };
     this.value = true;
   }
 
-  async addDepartment() {
-    if (!this.department) return;
+  async addTypeExpense() {
+    if (!this.typeExpense) return;
     const result = await axios.post(
-      "http://localhost:8080/api/departments/",
-      this.department
+      "http://localhost:8080/api/typesExpense/",
+      this.typeExpense
     );
     if (result) {
-      this.$emit("update-departments-list");
+      this.$emit("update-types-expense-list");
     }
     this.value = false;
   }
@@ -95,11 +95,11 @@ export default class CreateDepartmentForm extends Vue {
   }
 
   mounted(): void {
-    this.$bus.$on("toggle-department-form", () => this.show());
+    this.$bus.$on("toggle-type-expense-form", () => this.show());
   }
 
   beforeDestroy(): void {
-    this.$bus.$on("toggle-department-form", () => this.hide());
+    this.$bus.$on("toggle-type-expense-form", () => this.hide());
   }
 }
 </script>

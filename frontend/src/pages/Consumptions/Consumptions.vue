@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="btns" style="display: flex">
-      <q-btn @click="showWorkerForm(false)" label="Создать" />
+      <q-btn @click="showConsumptionForm(false)" label="Создать" />
       <div style="margin-left: auto">
         <q-btn
           v-if="selected.length"
@@ -15,10 +15,10 @@
     <q-table
       class="table"
       :columns="columns"
-      :data="getDepartmentName"
+      :data="getWorkerName"
       virtual-scroll
       :rows-per-page-options="[0]"
-      row-key="WorkerID"
+      row-key="ExpenseID"
       selection="single"
       :selected-rows-label="getSelectedString"
       :selected.sync="selected"
@@ -26,7 +26,7 @@
       <template v-slot:body-cell="props">
         <q-td
           class="td-curs"
-          @click="$router.push(`/workers/${props.key}`)"
+          @click="$router.push(`/consumptions/${props.key}`)"
           :selected="selected"
           :props="props"
         >
@@ -34,30 +34,45 @@
         </q-td>
       </template>
     </q-table>
-    <worker-form
-      :propDepartments="departments"
-      @update-workers-list="getWorkers"
-    ></worker-form>
+    <consumption-form
+      @update-consumptions-list="getConsumptions"
+      :propTypesExpense="typesExpense"
+      :propWorkers="workers"
+    ></consumption-form>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
-import WorkerForm from "src/components/Workers/CreateWorkerForm.vue";
+import ConsumptionForm from "src/components/Consumptions/CreateConsumptionForm.vue";
 
 @Component({
   components: {
-    WorkerForm,
+    ConsumptionForm,
   },
 })
 export default class Workers extends Vue {
+  consumptions: any | [] = [];
+  typesExpense: any | [] = [];
   workers: any | [] = [];
-  copyWorkers: any | [] = [];
-  departments: any | [] = [];
-  selected: { WorkerID: number }[] = [];
+  selected: { ExpenseID: number }[] = [];
 
   columns = [
+    {
+      name: "ExpenseID",
+      label: "ExpenseID",
+      field: "ExpenseID",
+      required: true,
+      align: "left",
+    },
+    {
+      name: "ViewID",
+      label: "ViewID",
+      field: "ViewID",
+      required: true,
+      align: "left",
+    },
     {
       name: "WorkerID",
       label: "WorkerID",
@@ -66,44 +81,16 @@ export default class Workers extends Vue {
       align: "left",
     },
     {
-      name: "Surname",
-      label: "Surname",
-      field: "Surname",
+      name: "Date",
+      label: "Date",
+      field: "Date",
       required: true,
       align: "left",
     },
     {
-      name: "Name",
-      label: "Name",
-      field: "Name",
-      required: true,
-      align: "left",
-    },
-    {
-      name: "Patronymic",
-      label: "Patronymic",
-      field: "Patronymic",
-      required: true,
-      align: "left",
-    },
-    {
-      name: "Position",
-      label: "Position",
-      field: "Position",
-      required: true,
-      align: "left",
-    },
-    {
-      name: "Experience",
-      label: "Experience",
-      field: "Experience",
-      required: true,
-      align: "left",
-    },
-    {
-      name: "DepartmentID",
-      label: "Department",
-      field: "DepartmentID",
+      name: "Sum",
+      label: "Sum",
+      field: "Sum",
       required: true,
       align: "left",
     },
@@ -113,16 +100,16 @@ export default class Workers extends Vue {
     this.$q
       .dialog({
         title: "Подтвердите действие",
-        message: `Вы действительно хотите удалить рабочего?`,
+        message: `Вы действительно хотите удалить информацию о расходах?`,
         cancel: true,
         persistent: true,
       })
       .onOk(async () => {
         const response = await axios.delete(
-          `http://localhost:8080/api/workers/${this.selected[0].WorkerID}`
+          `http://localhost:8080/api/consumptions/${this.selected[0].ExpenseID}`
         );
         if (response) {
-          this.getWorkers();
+          this.getConsumptions();
           this.selected = [];
         }
       })
@@ -131,8 +118,18 @@ export default class Workers extends Vue {
       });
   }
 
-  showWorkerForm(value: boolean) {
-    this.$bus.$emit("toggle-worker-form", value);
+  showConsumptionForm(value: boolean) {
+    this.$bus.$emit("toggle-consumption-form", value);
+  }
+
+  async getConsumptions() {
+    const response = await axios.get("http://localhost:8080/api/consumptions/");
+    this.consumptions = response.data;
+  }
+
+  async getTypesExpense() {
+    const response = await axios.get("http://localhost:8080/api/typesExpense/");
+    this.typesExpense = response.data;
   }
 
   async getWorkers() {
@@ -140,35 +137,32 @@ export default class Workers extends Vue {
     this.workers = response.data;
   }
 
-  async getDepartments() {
-    const response = await axios.get("http://localhost:8080/api/departments/");
-    this.departments = response.data;
-  }
-
-  get getDepartmentName() {
-    for (let d of this.departments) {
-      for (let w of this.workers) {
-        if (w.DepartmentID == d.DepartmentID) {
-          w.DepartmentID = d.Name;
+  get getTypeExpenseName() {
+    for (let c of this.consumptions) {
+      for (let t of this.typesExpense) {
+        if (c.ViewID == t.ViewID) {
+          c.ViewID = t.Name;
         }
       }
     }
-    return this.workers;
+    return this.consumptions;
   }
 
-  // async deleteWorker() {
-  //   const response = await axios.delete(
-  //     `http://localhost:8080/api/workers/${this.selected[0].WorkerID}`
-  //   );
-  //   if (response) {
-  //     this.getWorkers();
-  //     this.selected = [];
-  //   }
-  // }
+  get getWorkerName() {
+    for (let c of this.getTypeExpenseName) {
+      for (let t of this.workers) {
+        if (c.WorkerID == t.WorkerID) {
+          c.WorkerID = t.Name;
+        }
+      }
+    }
+    return this.getTypeExpenseName;
+  }
 
   mounted() {
+    this.getConsumptions();
+    this.getTypesExpense();
     this.getWorkers();
-    this.getDepartments();
   }
 
   getSelectedString() {

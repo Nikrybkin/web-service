@@ -1,12 +1,12 @@
 <template>
   <div class="container">
     <div class="btns" style="display: flex">
-      <q-btn @click="showDepartmentForm(false)" label="Создать" />
+      <q-btn @click="showTypeExpenseForm(false)" label="Создать" />
       <div style="margin-left: auto">
         <q-btn
           v-if="selected.length"
-          style="margin-left: 20px"
           @click="confirm()"
+          style="margin-left: 20px"
           color="red"
           label="Удалить"
         />
@@ -15,18 +15,18 @@
     <q-table
       class="table"
       :columns="columns"
-      :data="departments"
+      :data="typesExpense"
       virtual-scroll
       :rows-per-page-options="[0]"
-      row-key="DepartmentID"
-      selection="multiple"
+      row-key="ViewID"
+      selection="single"
       :selected-rows-label="getSelectedString"
       :selected.sync="selected"
     >
       <template v-slot:body-cell="props">
         <q-td
           class="td-curs"
-          @click="$router.push(`/departments/${props.key}`)"
+          @click="$router.push(`/typesExpense/${props.key}`)"
           :selected="selected"
           :props="props"
         >
@@ -34,31 +34,32 @@
         </q-td>
       </template>
     </q-table>
-    <department-form
-      @update-departments-list="getDepartments"
-    ></department-form>
+    <type-expense-form
+      :propTypeExpense="typesExpense"
+      @update-types-expense-list="getTypesExpense"
+    ></type-expense-form>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
-import DepartmentForm from "src/components/Departments/CreateDepartmentForm.vue";
+import TypeExpenseForm from "src/components/TypesExpense/CreateTypeExpense.vue";
 
 @Component({
   components: {
-    DepartmentForm,
+    TypeExpenseForm,
   },
 })
-export default class Departments extends Vue {
-  departments: any | [] = [];
-  selected: { DepartmentID: number }[] = [];
+export default class Workers extends Vue {
+  typesExpense: any | [] = [];
+  selected: { ViewID: number }[] = [];
 
   columns = [
     {
-      name: "DepartmentID",
-      label: "DepartmentID",
-      field: "DepartmentID",
+      name: "ViewID",
+      label: "ViewID",
+      field: "ViewID",
       required: true,
       align: "left",
     },
@@ -70,9 +71,9 @@ export default class Departments extends Vue {
       align: "left",
     },
     {
-      name: "NumberWorkers",
-      label: "NumberWorkers",
-      field: "NumberWorkers",
+      name: "Description",
+      label: "Description",
+      field: "Description",
       required: true,
       align: "left",
     },
@@ -82,16 +83,16 @@ export default class Departments extends Vue {
     this.$q
       .dialog({
         title: "Подтвердите действие",
-        message: `Вы действительно хотите удалить отдел?`,
+        message: `Вы действительно хотите удалить тип расхода?`,
         cancel: true,
         persistent: true,
       })
       .onOk(async () => {
         const response = await axios.delete(
-          `http://localhost:8080/api/departments/${this.selected[0].DepartmentID}`
+          `http://localhost:8080/api/typesExpense/${this.selected[0].ViewID}`
         );
         if (response) {
-          this.getDepartments();
+          this.getTypesExpense();
           this.selected = [];
         }
       })
@@ -100,27 +101,17 @@ export default class Departments extends Vue {
       });
   }
 
-  showDepartmentForm(value: boolean) {
-    this.$bus.$emit("toggle-department-form", value);
+  showTypeExpenseForm(value: boolean) {
+    this.$bus.$emit("toggle-type-expense-form", value);
   }
 
-  async getDepartments() {
-    const response = await axios.get("http://localhost:8080/api/departments/");
-    this.departments = response.data;
+  async getTypesExpense() {
+    const response = await axios.get("http://localhost:8080/api/typesExpense/");
+    this.typesExpense = response.data;
   }
-
-  // async deleteDepartment() {
-  //   const response = await axios.delete(
-  //     `http://localhost:8080/api/departments/${this.selected[0].DepartmentID}`
-  //   );
-  //   if (response) {
-  //     this.getDepartments();
-  //     this.selected = [];
-  //   }
-  // }
 
   mounted() {
-    this.getDepartments();
+    this.getTypesExpense();
   }
 
   getSelectedString() {

@@ -11,7 +11,7 @@ const getTypesExpense = async (req, res, next) => {
     }
 }
 
-const getTypeExpense =  async (req, res, next) => {
+const getTypeExpense = async (req, res, next) => {
     try {
         const ViewID = req.params.id;
         const oneTypeExpense = await typeExpenseData.getTypeExpenseById(ViewID);

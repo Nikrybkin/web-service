@@ -20,6 +20,22 @@ const routes: RouteConfig[] = [
       {
         path: '/workers/:id',
         component: () => import('pages/Workers/Worker.vue')
+      },
+      {
+        path: '/typesExpense',
+        component: () => import('pages/TypesExpense/TypesExpense.vue')
+      },
+      {
+        path: '/typesExpense/:id',
+        component: () => import('pages/TypesExpense/TypeExpense.vue')
+      },
+      {
+        path: '/consumptions',
+        component: () => import('pages/Consumptions/Consumptions.vue')
+      },
+      {
+        path: '/consumptions/:id',
+        component: () => import('pages/Consumptions/Consumption.vue')
       }
     ]
   },
