@@ -1,0 +1,6 @@
+SELECT [NormID]
+        ,[DepartmentID]
+        ,[ViewID]
+        ,[Sum]
+        ,[Date]
+FROM [dbo].[ConsumptionRates]
