@@ -1,5 +1,14 @@
 # web-service
 
+#backend
+
+npm install
+npm start
+
+#frontend
+npm install
+quasar dev
+
 # data base
 
 CREATE TABLE Department
