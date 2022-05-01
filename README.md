@@ -40,9 +40,9 @@
     )
 
     CREATE TABLE ConsumptionRates (
-    NormID INT PRIMARY KEY IDENTITY,
-    DepartmentID INT REFERENCES Department (DepartmentID) NOT NULL,
-    ViewID INT REFERENCES TypeExpense (ViewID) NOT NULL,
-    Sum INT CHECK (Sum > 0) NOT NULL,
-    Date DATETIME NOT NULL,
+        NormID INT PRIMARY KEY IDENTITY,
+        DepartmentID INT REFERENCES Department (DepartmentID) NOT NULL,
+        ViewID INT REFERENCES TypeExpense (ViewID) NOT NULL,
+        Sum INT CHECK (Sum > 0) NOT NULL,
+        Date DATETIME NOT NULL,
     )
