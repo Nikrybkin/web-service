@@ -10,7 +10,6 @@
             v-model="department.Name"
             class="input"
             filled
-            clearable
             label="Название"
             maxlength="40"
             lazy-rules
@@ -19,7 +18,6 @@
             v-model="department.NumberWorkers"
             class="input"
             filled
-            clearable
             label="Количество рабочих"
             lazy-rules
             type="number"
@@ -73,7 +71,7 @@ export default class CreateDepartmentForm extends Vue {
   async show() {
     this.department = {
       Name: "",
-      NumberWorkers: 0,
+      NumberWorkers: "",
     };
     this.value = true;
   }

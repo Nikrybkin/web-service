@@ -58,7 +58,12 @@
           lazy-rules
         />
         <q-card-actions class="button-block">
-          <q-btn type="Submit" label="Изменить" color="primary" />
+          <q-btn
+            :disabled="checkAddButtonDisabled"
+            type="Submit"
+            label="Изменить"
+            color="primary"
+          />
         </q-card-actions>
       </form>
     </q-card-section>
@@ -77,6 +82,15 @@ export default class Consumption extends Vue {
   typesExpense: any | [] = [];
   workers: any | [] = [];
   isAddButtonDisabled: boolean = true;
+
+  get checkAddButtonDisabled() {
+    return !(
+      this.consumption.ViewID !== "" &&
+      this.consumption.WorkerID !== "" &&
+      this.consumption.Date !== "" &&
+      this.consumption.Sum !== ""
+    );
+  }
 
   async getConsumption() {
     const result = await axios.get(

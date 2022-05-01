@@ -1,14 +1,14 @@
 <template>
-  <q-dialog @before-hide="hide" v-if="consumption" v-model="value">
+  <q-dialog @before-hide="hide" v-if="consumptionRates" v-model="value">
     <q-card style="width: 700px; max-width: 80vh">
       <q-card-section>
-        <div class="text-h6">Создание расхода</div>
+        <div class="text-h6">Создание норм расхода</div>
       </q-card-section>
       <q-card-section>
         <form @submit="addConsumption">
           <q-select
-            v-model="consumption.ViewID"
-            :options="getTypesExpenseName"
+            v-model="consumptionRates.DepartmentID"
+            :options="getDepartmentsName"
             class="input"
             filled
             label="Тип расхода"
@@ -16,8 +16,16 @@
             maxlength="40"
           />
           <q-select
-            v-model="consumption.WorkerID"
-            :options="getWorkersName"
+            v-model="consumptionRates.ViewID"
+            :options="getTypesExpenseName"
+            class="input"
+            filled
+            label="Тип расхода"
+            lazy-rules
+            maxlength="40"
+          />
+          <q-input
+            v-model="consumptionRates.Sum"
             class="input"
             filled
             label="Работник"
@@ -27,7 +35,7 @@
           <q-input
             class="input"
             filled
-            v-model="consumption.Date"
+            v-model="consumptionRates.Date"
             mask="####-##-##"
             label="Дата"
           >
@@ -39,7 +47,7 @@
                   transition-show="scale"
                   transition-hide="scale"
                 >
-                  <q-date v-model="consumption.Date">
+                  <q-date v-model="consumptionRates.Date">
                     <div class="row items-center justify-end">
                       <q-btn v-close-popup label="Close" color="primary" flat />
                     </div>
@@ -48,14 +56,6 @@
               </q-icon>
             </template>
           </q-input>
-          <q-input
-            v-model="consumption.Sum"
-            class="input"
-            filled
-            clearable
-            label="Стоимость"
-            lazy-rules
-          />
           <q-card-actions class="button-block">
             <q-btn
               :disabled="checkAddButtonDisabled"
@@ -77,15 +77,15 @@ import axios from "axios";
 @Component({
   components: {},
 })
-export default class CreateConsumptionForm extends Vue {
+export default class CreateConsumptionRatesForm extends Vue {
   @Prop({ type: Array, required: true }) propTypesExpense: any;
-  @Prop({ type: Array, required: true }) propWorkers: any;
+  @Prop({ type: Array, required: true }) propDepartments: any;
   value = false;
   isAddButtonDisabled: boolean = true;
-  consumption:
+  consumptionRates:
     | {
+        DepartmentID: number;
         ViewID: number;
-        WorkerID: number;
         Date: Date;
         Sum: number;
       }
@@ -95,53 +95,53 @@ export default class CreateConsumptionForm extends Vue {
     return true;
   }
 
-  get checkAddButtonDisabled() {
-    return !(
-      this.consumption.ViewID !== "" &&
-      this.consumption.WorkerID !== "" &&
-      this.consumption.Date !== "" &&
-      this.consumption.Sum !== ""
-    );
-  }
-
   async show() {
-    this.consumption = {
+    this.consumptionRates = {
+      DepartmentID: "",
       ViewID: "",
-      WorkerID: "",
       Date: "",
       Sum: "",
     };
     this.value = true;
   }
 
+  get checkAddButtonDisabled() {
+    return !(
+      this.consumptionRates.DepartmentID !== "" &&
+      this.consumptionRates.ViewID !== "" &&
+      this.consumptionRates.Date !== "" &&
+      this.consumptionRates.Sum !== ""
+    );
+  }
+
   async addConsumption() {
-    for (let item of this.propWorkers) {
-      if (this.consumption.WorkerID === item.Name) {
-        this.consumption.WorkerID = item.WorkerID;
+    for (let item of this.propDepartments) {
+      if (this.consumptionRates.DepartmentID === item.Name) {
+        this.consumptionRates.DepartmentID = item.DepartmentID;
       }
     }
     for (let item of this.propTypesExpense) {
-      if (this.consumption.ViewID === item.Name) {
-        this.consumption.ViewID = item.ViewID;
+      if (this.consumptionRates.ViewID === item.Name) {
+        this.consumptionRates.ViewID = item.ViewID;
       }
     }
-    if (!this.consumption) return;
+    if (!this.consumptionRates) return;
     const result = await axios.post(
-      "http://localhost:8080/api/consumptions/",
-      this.consumption
+      "http://localhost:8080/api/consumptionsRates/",
+      this.consumptionRates
     );
     if (result) {
-      this.$emit("update-consumptions-list");
+      this.$emit("update-consumptions-rates-list");
     }
     this.value = false;
   }
 
-  get getWorkersName() {
-    let workersName = [];
-    for (let item of this.propWorkers) {
-      workersName.push(item.Name);
+  get getDepartmentsName() {
+    let departmentsName = [];
+    for (let item of this.propDepartments) {
+      departmentsName.push(item.Name);
     }
-    return workersName;
+    return departmentsName;
   }
 
   get getTypesExpenseName() {
@@ -157,11 +157,11 @@ export default class CreateConsumptionForm extends Vue {
   }
 
   mounted(): void {
-    this.$bus.$on("toggle-consumption-form", () => this.show());
+    this.$bus.$on("toggle-consumption-rates-form", () => this.show());
   }
 
   beforeDestroy(): void {
-    this.$bus.$on("toggle-consumption-form", () => this.hide());
+    this.$bus.$on("toggle-consumption-rates-form", () => this.hide());
   }
 }
 </script>

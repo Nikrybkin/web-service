@@ -2,7 +2,7 @@
   <q-dialog @before-hide="hide" v-if="typeExpense" v-model="value">
     <q-card style="width: 700px; max-width: 80vh">
       <q-card-section>
-        <div class="text-h6">Создание отдела</div>
+        <div class="text-h6">Создание типа расхода</div>
       </q-card-section>
       <q-card-section>
         <form @submit="addTypeExpense">
@@ -10,7 +10,6 @@
             v-model="typeExpense.Name"
             class="input"
             filled
-            clearable
             label="Название"
             maxlength="40"
             lazy-rules
@@ -19,7 +18,6 @@
             v-model="typeExpense.Description"
             class="input"
             filled
-            clearable
             label="Описание"
             maxlength="40"
             lazy-rules
@@ -67,7 +65,7 @@ export default class CreateTypeExpenseForm extends Vue {
   // }
 
   get checkAddButtonDisabled() {
-    return this.typeExpense.Name == "" || this.typeExpense.Description == "";
+    return this.typeExpense.Name == "";
   }
 
   async show() {

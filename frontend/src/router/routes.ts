@@ -36,6 +36,14 @@ const routes: RouteConfig[] = [
       {
         path: '/consumptions/:id',
         component: () => import('pages/Consumptions/Consumption.vue')
+      },
+      {
+        path: '/consumptionsRates',
+        component: () => import('pages/ConsumptionsRates/ConsumptionsRates.vue')
+      },
+      {
+        path: '/consumptionsRates/:id',
+        component: () => import('pages/ConsumptionsRates/ConsumptionRates.vue')
       }
     ]
   },

@@ -10,7 +10,6 @@
           v-model="department.Name"
           class="input"
           filled
-          clearable
           label="Название"
           lazy-rules
         />
@@ -18,7 +17,6 @@
           v-model="department.NumberWorkers"
           class="input"
           filled
-          clearable
           label="Количество рабочих"
           lazy-rules
           type="number"
@@ -66,7 +64,9 @@ export default class Department extends Vue {
 
   get checkAddButtonDisabled() {
     return !(
-      this.department.NumberWorkers > 0 && this.department.NumberWorkers < 101
+      this.department.NumberWorkers > 0 &&
+      this.department.NumberWorkers < 101 &&
+      this.department.Name !== ""
     );
   }
 

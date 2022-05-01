@@ -10,7 +10,6 @@
             v-model="worker.Surname"
             class="input"
             filled
-            clearable
             label="Фамилия"
             lazy-rules
             maxlength="40"
@@ -19,7 +18,6 @@
             v-model="worker.Name"
             class="input"
             filled
-            clearable
             label="Имя"
             lazy-rules
             maxlength="40"
@@ -28,7 +26,6 @@
             v-model="worker.Patronymic"
             class="input"
             filled
-            clearable
             label="Отчество"
             lazy-rules
             maxlength="40"
@@ -37,7 +34,6 @@
             v-model="worker.Position"
             class="input"
             filled
-            clearable
             label="Должность"
             lazy-rules
             maxlength="40"
@@ -46,7 +42,6 @@
             v-model="worker.Experience"
             class="input"
             filled
-            clearable
             label="Опыт"
             type="number"
             lazy-rules
@@ -104,7 +99,15 @@ export default class CreateWorkerForm extends Vue {
   }
 
   get checkAddButtonDisabled() {
-    return !(this.worker.Experience > 0 && this.worker.Experience < 41);
+    return !(
+      this.worker.Name !== "" &&
+      this.worker.Surname !== "" &&
+      this.worker.Patronymic !== "" &&
+      this.worker.Position !== "" &&
+      this.worker.Experience > 0 &&
+      this.worker.Experience < 41 &&
+      this.worker.DepartmentID !== ""
+    );
   }
 
   async show() {
@@ -113,8 +116,8 @@ export default class CreateWorkerForm extends Vue {
       Name: "",
       Patronymic: "",
       Position: "",
-      Experience: 0,
-      DepartmentID: 0,
+      Experience: "",
+      DepartmentID: "",
     };
     this.value = true;
   }
@@ -157,6 +160,7 @@ export default class CreateWorkerForm extends Vue {
 
   mounted(): void {
     this.$bus.$on("toggle-worker-form", () => this.show());
+    console.log(this.propDepartments);
   }
 
   beforeDestroy(): void {

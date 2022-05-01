@@ -68,8 +68,14 @@ const linksData = [
   {
     title: "Consumptions",
     caption: "List of consumptions",
-    icon: "landmark",
+    icon: "book",
     link: "/#/consumptions",
+  },
+  {
+    title: "Consumptions Rates",
+    caption: "List of consumptions rates",
+    icon: "style",
+    link: "/#/consumptionsRates",
   },
 ];
 

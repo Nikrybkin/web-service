@@ -10,7 +10,6 @@
           v-model="workerChangeId.Surname"
           class="input"
           filled
-          clearable
           label="Фамилия"
           lazy-rules
           maxlength="40"
@@ -19,7 +18,6 @@
           v-model="workerChangeId.Name"
           class="input"
           filled
-          clearable
           label="Имя"
           lazy-rules
           maxlength="40"
@@ -28,7 +26,6 @@
           v-model="workerChangeId.Patronymic"
           class="input"
           filled
-          clearable
           label="Отчество"
           lazy-rules
           maxlength="40"
@@ -37,7 +34,6 @@
           v-model="workerChangeId.Position"
           class="input"
           filled
-          clearable
           label="Должность"
           maxlength="40"
           lazy-rules
@@ -46,7 +42,6 @@
           v-model="workerChangeId.Experience"
           class="input"
           filled
-          clearable
           label="Опыт"
           type="number"
           lazy-rules
@@ -113,7 +108,15 @@ export default class Worker extends Vue {
   }
 
   get checkAddButtonDisabled() {
-    return !(this.worker.Experience > 0 && this.worker.Experience < 41);
+    return !(
+      this.worker.Name !== "" &&
+      this.worker.Surname !== "" &&
+      this.worker.Patronymic !== "" &&
+      this.worker.Position !== "" &&
+      this.worker.Experience > 0 &&
+      this.worker.Experience < 41 &&
+      this.worker.DepartmentID !== ""
+    );
   }
 
   get workerChangeId() {

@@ -19,7 +19,7 @@
       virtual-scroll
       :rows-per-page-options="[0]"
       row-key="DepartmentID"
-      selection="multiple"
+      selection="single"
       :selected-rows-label="getSelectedString"
       :selected.sync="selected"
     >
