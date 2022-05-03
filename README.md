@@ -46,3 +46,14 @@
         Sum INT CHECK (Sum > 0) NOT NULL,
         Date DATETIME NOT NULL,
     )
+    GO
+        CREATE TRIGGER CHECK_NUMBER_WORKERS
+        ON Worker
+        AFTER UPDATE, INSERT
+        AS
+        if (select NumberWorkers from Department
+        where DepartmentID=(select DepartmentID from inserted)) < (select COUNT(WorkerID) from Worker
+        where DepartmentID=(select DepartmentID from inserted))
+        begin
+        rollback
+    end

@@ -11,7 +11,7 @@
             :options="getDepartmentsName"
             class="input"
             filled
-            label="Тип расхода"
+            label="Отдел"
             lazy-rules
             maxlength="40"
           />
@@ -20,7 +20,7 @@
             :options="getTypesExpenseName"
             class="input"
             filled
-            label="Тип расхода"
+            label="Вид расхода"
             lazy-rules
             maxlength="40"
           />
@@ -28,7 +28,7 @@
             v-model="consumptionRates.Sum"
             class="input"
             filled
-            label="Работник"
+            label="Сумма"
             lazy-rules
             maxlength="40"
           />

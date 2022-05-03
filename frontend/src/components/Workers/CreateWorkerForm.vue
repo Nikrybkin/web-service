@@ -133,9 +133,12 @@ export default class CreateWorkerForm extends Vue {
       this.worker
     );
     if (result) {
+      if (typeof result.data == "string") {
+        console.log(result.data);
+      }
       this.$emit("update-workers-list");
+      this.value = false;
     }
-    this.value = false;
   }
 
   //   get departmentId() {
