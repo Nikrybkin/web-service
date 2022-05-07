@@ -12,7 +12,7 @@
 
     CREATE TABLE Department (
     	DepartmentID INT PRIMARY KEY IDENTITY,
-    	NumberWorkers INT CHECKNumberWorkers > 0 AND NumberWorkers < 101) NOT NULL,
+    	NumberWorkers INT CHECK(NumberWorkers > 0 AND NumberWorkers < 101) NOT NULL,
     )
 
     CREATE TABLE Worker (
