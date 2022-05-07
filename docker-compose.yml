@@ -11,7 +11,7 @@ services:
     volumes:
       - mssqldata:/var/opt/mssql
       - ./database/backup:/var/opt/mssql/backup
-  application:
+  server:
     build:
         context: ./
         dockerfile: ./Dockerfile
@@ -22,9 +22,9 @@ services:
       - SQL_SERVER=mssql
       - SQL_PORT=1433
     ports:
-      - 5000:80
-    # depends_on:
-    #   - "mssql"
+      - 8080:8080
+    depends_on:
+      - "mssql"
     
 volumes:
   mssqldata:
