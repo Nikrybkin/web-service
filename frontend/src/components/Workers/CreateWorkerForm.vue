@@ -60,7 +60,7 @@
           />
           <q-card-actions class="button-block">
             <q-btn
-              :disabled="checkAddButtonDisabled"
+              :disabled='!result'
               type="submit"
               label="Создать"
               color="primary"
@@ -81,8 +81,15 @@ import axios from "axios";
 })
 export default class CreateWorkerForm extends Vue {
   @Prop({ type: Array, required: true }) propDepartments: any;
+  @Prop({ type: Array, required: true }) propWorkers: any;
+
+  id: number = 0
+  count: any[] = []
+
+  workers: any[] = []
 
   value = false;
+  isAddButtonDisabled: boolean = false;
   worker:
     | {
         Surname: string;
@@ -149,6 +156,57 @@ export default class CreateWorkerForm extends Vue {
   //     return departmentId;
   //   }
 
+  get getId() {
+      for (let item of this.propDepartments) {
+        if (this.worker.DepartmentID == item.Name) {
+       return this.id = item.DepartmentID
+      }
+    }
+  }
+
+  get getCheckWorkerLength() {
+    let arr = []
+    for (let item of this.workers) {
+      if (item.DepartmentID == this.getId) {
+       arr.push(item)
+      }
+    }
+    return arr.length
+  }
+
+  get numberWorkesLength() {
+    for (let item of this.propDepartments) {
+      if (item.DepartmentID == this.getId) {
+        return item.NumberWorkers
+      }
+    }
+  }
+
+  get buttonDisabled() {
+    for (let item of this.propDepartments) {
+      if (item.DepartmentID == this.getId) {
+        if (item.NumberWorkers < this.getCheckWorkerLength) {
+          return this.isAddButtonDisabled = false
+        } else {
+          return this.isAddButtonDisabled = true
+        }
+      }
+    }
+  }
+
+   async getWorkers() {
+    const response = await axios.get("http://localhost:8080/api/workers/");
+    this.workers = response.data;
+  }
+
+  get result() {
+    if (this.getCheckWorkerLength < this.numberWorkesLength) {
+      return true
+    } else {
+      return false
+    }
+  }
+
   get departmentName() {
     let departmentName = [];
     for (let i of this.propDepartments) {
@@ -162,6 +220,7 @@ export default class CreateWorkerForm extends Vue {
   }
 
   mounted(): void {
+    this.getWorkers()
     this.$bus.$on("toggle-worker-form", () => this.show());
     console.log(this.propDepartments);
   }

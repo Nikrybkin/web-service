@@ -46,6 +46,7 @@
         Sum INT CHECK (Sum > 0) NOT NULL,
         Date DATETIME NOT NULL,
     )
+
     GO
         CREATE TRIGGER CHECK_NUMBER_WORKERS
         ON Worker

@@ -5,6 +5,7 @@
       <div style="margin-left: auto">
         <q-btn
           v-if="selected.length"
+          :disabled="checkNumberWorkers"
           style="margin-left: 20px"
           @click="confirm()"
           color="red"
@@ -52,7 +53,9 @@ import DepartmentForm from "src/components/Departments/CreateDepartmentForm.vue"
 })
 export default class Departments extends Vue {
   departments: any | [] = [];
+  workers: any | [] = []
   selected: { DepartmentID: number }[] = [];
+  isAddButtonDisabled: boolean = false;
 
   columns = [
     {
@@ -109,18 +112,35 @@ export default class Departments extends Vue {
     this.departments = response.data;
   }
 
-  // async deleteDepartment() {
-  //   const response = await axios.delete(
-  //     `http://localhost:8080/api/departments/${this.selected[0].DepartmentID}`
-  //   );
-  //   if (response) {
-  //     this.getDepartments();
-  //     this.selected = [];
-  //   }
-  // }
+
+ async getWorkers() {
+    const response = await axios.get("http://localhost:8080/api/workers/");
+    this.workers = response.data;
+  }
+
+
+  async deleteDepartment() {
+    const response = await axios.delete(
+      `http://localhost:8080/api/departments/${this.selected[0].DepartmentID}`
+    );
+    if (response) {
+      this.getDepartments();
+      this.selected = [];
+    }
+  }
 
   mounted() {
     this.getDepartments();
+    this.getWorkers();
+  }
+
+  get checkNumberWorkers() {
+    for (let item of this.workers) {
+      if (item.DepartmentID == this.selected[0].DepartmentID) {
+        this.isAddButtonDisabled = true
+        return this.isAddButtonDisabled
+      }
+    }
   }
 
   getSelectedString() {

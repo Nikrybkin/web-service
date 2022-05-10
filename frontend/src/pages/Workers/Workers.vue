@@ -36,6 +36,7 @@
     </q-table>
     <worker-form
       :propDepartments="departments"
+      :propWorkers="workers"
       @update-workers-list="getWorkers"
     ></worker-form>
   </div>
