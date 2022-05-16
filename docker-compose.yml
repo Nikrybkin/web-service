@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+      - 4433:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Secret1234
+    volumes:
+      - mssqldata:/var/opt/mssql
+      - ./database/backup:/var/opt/mssql/backup
+  server:
+    build:
+        context: ./
+        dockerfile: ./Dockerfile
+    image: jskonst/lecture_sample_node
+    env_file:
+      - ./backend/.env
+    environment:
+      - SQL_SERVER=mssql
+      - SQL_PORT=1433
+    ports:
+      - 8080:8080
+    depends_on:
+      - "mssql"
+    
+volumes:
+  mssqldata:
+    external: true
